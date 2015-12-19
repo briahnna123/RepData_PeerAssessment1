@@ -1,7 +1,7 @@
 # Reproducible Research: Peer Assessment 1
 20 December 2015  
-**Goal**: To create a *dynamic document*, in which thourougly explains the steps
-taken for analysis on the activity data. Futhermore, the objective includes 
+**Goal**: To create a *dynamic document*, that thourougly explains step-by-step 
+analysis of the activity data. Futhermore, the objective includes 
 "...[a written] report that answers the questions detailed below. Ultimately, 
 [we] will need to complete the entire assignment in a single R markdown document
 that can be processed by knitr and be transformed into an HTML file." 
@@ -112,7 +112,7 @@ print(steps)
 ```r
 # Step 4: Histogram(interval) of Steps each Day
 day_step<- aggregate(steps ~ date, active_data, sum) # Group by Date and then Sum the Steps
-step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col="purple")
+step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col=cm.colors(6))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-2.png) 
@@ -198,7 +198,7 @@ print(graph)
 ```r
 # Step 8: Histogram(interval) of Average Steps per Day
 avg_step<- aggregate(steps ~ date, active_data, mean) # Group by Date and then Sum the Steps
-avg_step <- hist(avg_step$steps, xlab= "Mean Number of Steps", main="Average Amount of Steps per Each Day!", col="orange")
+avg_step <- hist(avg_step$steps, xlab= "Mean Number of Steps", main="Average Amount of Steps per Each Day!",  col=rainbow(6))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
@@ -288,3 +288,14 @@ print(median_step) # This Graph shows Median, where middle value falls
 
 
 5. Are there differences in activity patterns between weekdays and weekends?
+
+
+Is there a time series plot of the average number of steps taken (averaged across all days) versus the 5-minute intervals?
+
+Does the report give the 5-minute interval that, on average, contains the maximum number of steps?
+
+Does the report describe and show with code a strategy for imputing missing data?
+
+Does the report contain a histogram of the total number of steps taken each day after missing values were imputed?
+
+Does the report contain a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
