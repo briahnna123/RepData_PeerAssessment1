@@ -100,7 +100,7 @@ str(active_data$date) # See what type of Variable "Date" is in data frame
 
 ```r
 # Step 3: Histogram of Steps per Day
-steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=1))
+steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=.75))
 steps <- steps+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 steps <- steps+ xlab("Date") + ylab("Amount Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
 steps <- steps + guides(fill=guide_legend(ncol=2))
@@ -110,7 +110,44 @@ print(steps)
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 ```r
-# Step 4: Calculate table with mean steps by date
+# Step 4: Histogram(interval) of Steps each Day
+day_step<- aggregate(steps ~ date, active_data, sum) # Group by Date and then Sum the Steps
+step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col="purple")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-2.png) 
+
+```r
+print(step) # This Graph shows number of Steps each day as a interval histogram 
+```
+
+```
+## $breaks
+## [1]     0  5000 10000 15000 20000 25000
+## 
+## $counts
+## [1]  5 12 28  6  2
+## 
+## $density
+## [1] 1.886792e-05 4.528302e-05 1.056604e-04 2.264151e-05 7.547170e-06
+## 
+## $mids
+## [1]  2500  7500 12500 17500 22500
+## 
+## $xname
+## [1] "day_step$steps"
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,"class")
+## [1] "histogram"
+```
+
+```r
+# instead of individual dates
+
+# Step 5: Calculate table with mean steps by date
 group_date <- group_by(active_data, date) # Group data frame by date
 avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE)) 
 # Calculated mean by grouped "date" above
@@ -118,7 +155,7 @@ avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE))
 
 
 ```r
-# Step 5: Print Out visual descriptive, put table and Historgram to represent
+# Step 6: Print Out visual descriptive, put table and Historgram to represent
 # the Mean Number of Steps per day(date)
 tbl_df(avg_steps_bydate) # View the Data frame with Date and Average/Mean Steps
 ```
@@ -141,7 +178,7 @@ tbl_df(avg_steps_bydate) # View the Data frame with Date and Average/Mean Steps
 ```
 
 ```r
-# Step 6: Add layers to graph
+# Step 7: Add layers to graph
 graph<- ggplot(avg_steps_bydate, aes(x=factor(date), y=Mean_Steps, fill=date, width=1))
 graph <- graph+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 graph <- graph+ xlab("Date") + ylab("Mean Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
@@ -152,12 +189,45 @@ graph <- graph + theme(legend.background = element_rect(fill="gray90", size=1, l
 graph <- graph + guides(fill=guide_legend(ncol=10))
 print(graph)
 
+# Step 8: Histogram(interval) of Average Steps per Day
+avg_step<- aggregate(steps ~ date, active_data, mean) # Group by Date and then Sum the Steps
+avg_step <- hist(avg_step$steps, xlab= "Mean Number of Steps", main="Average Amount of Steps per Each Day!", col="orange")
+print(avg_step) # This Graph shows number of Steps each day as a interval histogram 
+```
+
+```
+## $breaks
+## [1]  0 10 20 30 40 50 60 70 80
+## 
+## $counts
+## [1]  3  4  5 19 13  6  1  2
+## 
+## $density
+## [1] 0.005660377 0.007547170 0.009433962 0.035849057 0.024528302 0.011320755
+## [7] 0.001886792 0.003773585
+## 
+## $mids
+## [1]  5 15 25 35 45 55 65 75
+## 
+## $xname
+## [1] "avg_step$steps"
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,"class")
+## [1] "histogram"
+```
+
+```r
+# instead of individual dates
+
 # Step 7: Now for the median we do the same as above
 group_date <- group_by(active_data, date) # Group data frame by date
 median_steps <- summarise(group_date, Median_Steps= median(steps))
 ```
 
-<img src="PA1_template_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="900px" width="900px" />
+<img src="PA1_template_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="900px" /><img src="PA1_template_files/figure-html/unnamed-chunk-3-2.png" title="" alt="" width="900px" />
 
 3. What is the average daily activity pattern?
 

@@ -37,7 +37,7 @@ head(active_data)
 library(dplyr) 
 active_data <- tbl_df(active_data) # Create dplyr data frame
 
-# Now, we can see we have a "clean" data frame with 3 variable and 15264 
+# Now, we can see we have a "clean" data frame with 3 variables and 15264 
 # observations! We can now move onto the second part of the analysis!
 ```
 
@@ -50,13 +50,20 @@ library(ggplot2)
 str(active_data$date) # See what type of Variable "Date" is in data frame
 
 # Step 3: Histogram of Steps per Day
-steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=1))
+steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=.75))
 steps <- steps+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 steps <- steps+ xlab("Date") + ylab("Amount Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
 steps <- steps + guides(fill=guide_legend(ncol=2))
 print(steps)
 
-# Step 4: Calculate table with mean steps by date
+# Step 4: Histogram(interval) of Steps each Day
+day_step<- aggregate(steps ~ date, active_data, sum) # Group by Date and then Sum the Steps
+step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col="purple")
+print(step) 
+# This Graph shows number of Steps each day as a larger interval histogram 
+# instead of individual dates interval.
+
+# Step 5: Calculate table with mean steps by date
 group_date <- group_by(active_data, date) # Group data frame by date
 avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE)) 
 # Calculated mean by grouped "date" above
@@ -64,11 +71,11 @@ avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE))
 ```
 
 ```{r out.width=c('900px', '900px'), fig.show='hold'}
-# Step 5: Print Out visual descriptive, put table and Historgram to represent
+# Step 6: Print Out visual descriptive, put table and Historgram to represent
 # the Mean Number of Steps per day(date)
 tbl_df(avg_steps_bydate) # View the Data frame with Date and Average/Mean Steps
 
-# Step 6: Add layers to graph
+# Step 7: Add layers to graph
 graph<- ggplot(avg_steps_bydate, aes(x=factor(date), y=Mean_Steps, fill=date, width=1))
 graph <- graph+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 graph <- graph+ xlab("Date") + ylab("Mean Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
@@ -78,6 +85,12 @@ graph <- graph + theme(legend.background = element_rect())
 graph <- graph + theme(legend.background = element_rect(fill="gray90", size=1, linetype="dotted"))
 graph <- graph + guides(fill=guide_legend(ncol=10))
 print(graph)
+
+# Step 8: Histogram(interval) of Average Steps per Day
+avg_step<- aggregate(steps ~ date, active_data, mean) # Group by Date and then Sum the Steps
+avg_step <- hist(avg_step$steps, xlab= "Mean Number of Steps", main="Average Amount of Steps per Each Day!", col="orange")
+print(avg_step) # This Graph shows number of Steps each day as a interval histogram 
+# instead of individual dates
 
 # Step 7: Now for the median we do the same as above
 group_date <- group_by(active_data, date) # Group data frame by date
