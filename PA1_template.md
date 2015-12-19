@@ -333,9 +333,9 @@ xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", 
                            panel.points(x_value, y_max, cex=2, pch=16)
                            },
                           par.settings=list(superpose.symbol=list(col=c("blue", "blue"), 
-                                            fill=c("blue", "blue"), pch=c(16, 16), cex=2)),
+                                            fill=c("blue", "blue"), pch=c(16, 16), cex=1)),
 
-                          auto.key = list(points=TRUE, x = 0.7, y = 0.8, text = c("Maxium Point"))
+                          auto.key = list(points=TRUE, x = 0.7, y = 0.8, text = c("Max Interval"))
        )
 ```
 
@@ -446,7 +446,215 @@ head(df)
 ## 6 37.3826 2012-10-01       25
 ```
 
-7. Imputing missing values, make a histogram of the total number of steps taken each day after missing values were imputed?
+7. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
+
+```r
+# Use the Median created data frame because when data is skewed the Median is a 
+# Better representation of the data
+
+# Step 1: Load ggplot2 for graphing
+library(ggplot2) 
+# Step 2: Histogram Steps per Day
+sum_missing_steps<- aggregate(steps ~ date, df_missing, sum) # Group by Date and then Sum the Steps
+step <- hist(sum_missing_steps$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col=cm.colors(6))
+abline(v = mean(sum_missing_steps$steps), col = "ivory4", lwd = 2)
+abline(v = median(sum_missing_steps$steps), col = "black", lwd = 3)
+legend(x = "topright", c("Mean", "Median"),col = c("ivory4", "black"), lwd = c(2, 2, 2))
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-15-1.png) 
+
+### We should notice the similiarties between our original steps graph, without NA,
+### and current graphs with NA replaced values by Median. In our original we had  
+### 53 observations after grouping and in our modified we have 61 observations after grouping. 
+### The original values produced:
+
+```r
+mean(day_step$steps) # Original Mean Steps
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(day_step$steps) # Original Median Steps
+```
+
+```
+## [1] 10765
+```
+
+### The new values produced:
+
+
+```r
+mean(sum_missing_steps$steps) # New Mean Steps
+```
+
+```
+## [1] 10642.7
+```
+
+```r
+median(sum_missing_steps$steps) # New Median Steps
+```
+
+```
+## [1] 10395
+```
+
+
+
+```r
+# Step 3: Histogram of Average Steps per Day
+replace_missing<- aggregate(steps ~ date, df_missing, mean) # Group by Date and then Sum the Steps
+replaced_step <- hist(replace_missing$steps, xlab= "Mean Number of Steps", main="Average Amount of Steps per Each Day!",  col=rainbow(6))
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-18-1.png) 
+
+```r
+print(replaced_step) # This Graph shows number of Steps each day as a interval histogram 
+```
+
+```
+## $breaks
+## [1]  0 10 20 30 40 50 60 70 80
+## 
+## $counts
+## [1]  3  4  5 27 13  6  1  2
+## 
+## $density
+## [1] 0.004918033 0.006557377 0.008196721 0.044262295 0.021311475 0.009836066
+## [7] 0.001639344 0.003278689
+## 
+## $mids
+## [1]  5 15 25 35 45 55 65 75
+## 
+## $xname
+## [1] "replace_missing$steps"
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,"class")
+## [1] "histogram"
+```
+
+```r
+# instead of individual dates
+```
+
+### The original values produced:
+
+```r
+avg_step<- aggregate(steps ~ date, active_data, mean) 
+mean(avg_step$step) # Original Mean Steps
+```
+
+```
+## [1] 37.3826
+```
+
+```r
+median(avg_step$step) # Original Median Steps
+```
+
+```
+## [1] 37.37847
+```
+
+### The new values produced:
+
+```r
+mean(replace_missing$steps) # New Mean Steps
+```
+
+```
+## [1] 36.95383
+```
+
+```r
+median(replace_missing$steps) # New Median Steps
+```
+
+```
+## [1] 36.09375
+```
+
+### We should notice the similiarties between our original steps graph, without
+### NA's and current graphs with NA replaced values by Median.
+
+7. Imputing missing values, Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+### No, the assigned Median Values to the Original Data Set does not change the values by much.
+### Without NA's,  the Total Number of Steps was 10766.19 and the Total Number of Steps
+### with replaced NA's was 10642.7. The diference is:
+
+
+```r
+10766.19 -10642.7 # Difference of 123.49 Steps
+```
+
+```
+## [1] 123.49
+```
+
+### The addition of NA's impacted the data resulting in averages and medians to be slightly smaler.
 
 8. Are there differences in activity patterns between weekdays and weekends? Create a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
+(Use the dataset with the filled-in missing values for this part.)
+
+
+```r
+# Step1: Define WeekDays and WeekEnds
+patterns= df_missing
+patterns$day <- c("weekday", "weekend") # Add Column for Week-type
+patterns$day <- weekdays(as.Date(patterns$date)) # Fill in the Column
+patterns[patterns$day == "Monday",]$day = "weekday"
+patterns[patterns$day == "Tuesday",]$day = "weekday"
+patterns[patterns$day == "Wednesday",]$day = "weekday"
+patterns[patterns$day == "Thursday",]$day = "weekday"
+patterns[patterns$day == "Friday",]$day = "weekday"
+patterns[patterns$day == "Saturday",]$day = "weekend"
+patterns[patterns$day == "Sunday",]$day = "weekend"
+str(patterns)
+```
+
+```
+## 'data.frame':	17568 obs. of  4 variables:
+##  $ steps   : num  34.1 34.1 34.1 34.1 34.1 ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+##  $ day     : chr  "weekday" "weekday" "weekday" "weekday" ...
+```
+
+```r
+patterns[, "day"] <- as.factor(patterns[, "day"]) # Turn into a factor w/ two levels
+str(patterns)
+```
+
+```
+## 'data.frame':	17568 obs. of  4 variables:
+##  $ steps   : num  34.1 34.1 34.1 34.1 34.1 ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+##  $ day     : Factor w/ 2 levels "weekday","weekend": 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+```r
+# Step 2: Create Graph 
+library(ggplot2)
+pattern2<- aggregate(steps~interval+ day, patterns, mean) # Group by interval
+
+pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps)) + geom_point(shape=1)  + facet_grid(day ~.)
+
+pattern_plot
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-22-1.png) 
+
+
+
 
