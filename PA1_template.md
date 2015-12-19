@@ -80,7 +80,7 @@ library(dplyr)
 ```r
 active_data <- tbl_df(active_data) # Create dplyr data frame
 
-# Now, we can see we have a "clean" data frame with 3 variable and 15264 
+# Now, we can see we have a "clean" data frame with 3 variables and 15264 
 # observations! We can now move onto the second part of the analysis!
 ```
 
@@ -118,7 +118,7 @@ step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Step
 ![](PA1_template_files/figure-html/unnamed-chunk-2-2.png) 
 
 ```r
-print(step) # This Graph shows number of Steps each day as a interval histogram 
+print(step) 
 ```
 
 ```
@@ -145,16 +145,18 @@ print(step) # This Graph shows number of Steps each day as a interval histogram
 ```
 
 ```r
-# instead of individual dates
+# This Graph shows number of Steps each day as a larger interval histogram 
+# instead of individual dates interval.
+```
 
+##**Mean**
+
+```r
 # Step 5: Calculate table with mean steps by date
 group_date <- group_by(active_data, date) # Group data frame by date
 avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE)) 
 # Calculated mean by grouped "date" above
-```
 
-
-```r
 # Step 6: Print Out visual descriptive, put table and Historgram to represent
 # the Mean Number of Steps per day(date)
 tbl_df(avg_steps_bydate) # View the Data frame with Date and Average/Mean Steps
@@ -188,10 +190,20 @@ graph <- graph + theme(legend.background = element_rect())
 graph <- graph + theme(legend.background = element_rect(fill="gray90", size=1, linetype="dotted"))
 graph <- graph + guides(fill=guide_legend(ncol=10))
 print(graph)
+```
 
+<img src="PA1_template_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="900px" width="900px" />
+
+
+```r
 # Step 8: Histogram(interval) of Average Steps per Day
 avg_step<- aggregate(steps ~ date, active_data, mean) # Group by Date and then Sum the Steps
 avg_step <- hist(avg_step$steps, xlab= "Mean Number of Steps", main="Average Amount of Steps per Each Day!", col="orange")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
+```r
 print(avg_step) # This Graph shows number of Steps each day as a interval histogram 
 ```
 
@@ -221,13 +233,51 @@ print(avg_step) # This Graph shows number of Steps each day as a interval histog
 
 ```r
 # instead of individual dates
-
-# Step 7: Now for the median we do the same as above
-group_date <- group_by(active_data, date) # Group data frame by date
-median_steps <- summarise(group_date, Median_Steps= median(steps))
 ```
 
-<img src="PA1_template_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" width="900px" /><img src="PA1_template_files/figure-html/unnamed-chunk-3-2.png" title="" alt="" width="900px" />
+##**Median**
+
+```r
+# Step 9: Now for the median we do the same as above
+median_step<- aggregate(steps ~ date, active_data, median) # Group by Date and then Sum the Steps
+median_step <- hist(median_step$steps, xlab= "Median Number of Steps", main="Median Steps per Each Day!", col="violet")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
+print(median_step) # This Graph shows Median, where middle value falls
+```
+
+```
+## $breaks
+## [1] -1  0
+## 
+## $counts
+## [1] 53
+## 
+## $density
+## [1] 1
+## 
+## $mids
+## [1] -0.5
+## 
+## $xname
+## [1] "median_step$steps"
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,"class")
+## [1] "histogram"
+```
+
+###The Analyzed **Mean** amount of Steps is: 
+[1] 10766.19
+
+### and the analyzed **Median** amount of Steps is: 
+[1] 10765
+
 
 3. What is the average daily activity pattern?
 
