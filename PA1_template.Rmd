@@ -29,7 +29,7 @@ active_data <- read.csv(activity)
 str(active_data) # View data Structure
 active_data<- na.omit(active_data) # Removing "NA's"
 
-# Step 4: Re-Peak at the Data Frame to ensure no NA
+# Step 4: Re-Peak at the Data Frame to ensure no "NA's"
 str(active_data)
 head(active_data)
 
@@ -37,10 +37,35 @@ head(active_data)
 # observations! We can now move onto the second part of the analysis!
 ```
 
-2. What is mean total number of steps taken per day
+2. What is mean total number of steps taken per day?
 ```{r}
-# Step 1
+# Step 1: Use dplyr package for easier manipulation of data frame
+library(ggplot2) # Load ggplot2 for graphing
+library(dplyr) 
+active_data <- tbl_df(active_data) # Create dplyr data frame
 
+# Step 2: Group Steps by Day, specifically the variable "Date"
+str(active_data$date) # See what type of Variable "Date" is in data frame
+
+group_date <- group_by(active_data, date) # Group data frame by date
+avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE) ) 
+# Calculated mean by grouped date above
+```
+
+```{r out.width=c('700px', '1000px'), fig.show='hold'}
+# Step 3: Print Out visual descriptive, put table and Historgram to represent
+# the Mean Number of Steps per day(date)
+
+avg_steps_bydate # View the Data frame with Date and Average/Mean Steps
+
+graph<- ggplot(avg_steps_bydate, aes(x=factor(date), y=Mean_Steps, fill=date, width=1))
+graph <- graph+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
+graph <- graph+ xlab("Date") + ylab("Mean Steps") + theme(axis.text.x= element_text(angle=90, size=7)) 
+graph <- graph+ ggtitle("Average Steps per Day") + theme(legend.position="bottom")
+graph <- graph+ theme(plot.title = element_text(size=10, face="bold", vjust=2))
+graph <- graph + theme(legend.background = element_rect()) 
+graph <- graph + theme(legend.background = element_rect(fill="gray90", size=1, linetype="dotted"))
+print(graph)
 ```
 
 3. What is the average daily activity pattern?
