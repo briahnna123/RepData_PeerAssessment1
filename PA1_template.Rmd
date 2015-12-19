@@ -135,13 +135,21 @@ xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg, type=c("l",
 ```
 
 4. Imputing missing values
+```{r}
+y_max= max(interval_avg$steps)
+x_value= interval_avg[interval_avg$steps==y_max,1]
 
-
+xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", "g"),
+       ylab="Average number of Steps", xlab="5-minute Intervals", main="Average Activity Patterns",
+       panel=function(...){panel.lines(interval_avg$interval,interval_avg$steps)
+                           panel.grid(...)
+                           panel.abline(v=x_value, lty = "dotted", col = "black")
+                           panel.points(x_value, y_max, cex=2, pch=16)})
+```
 
 5. Are there differences in activity patterns between weekdays and weekends?
 
 
-Is there a time series plot of the average number of steps taken (averaged across all days) versus the 5-minute intervals?
 
 Does the report give the 5-minute interval that, on average, contains the maximum number of steps?
 
