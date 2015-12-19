@@ -1,5 +1,13 @@
-# Reproducible Research: Peer Assessment 1
-20 December 2015  
+---
+title: 'Reproducible Research: Peer Assessment 1'
+output:
+  html_document:
+    fig_caption: yes
+    highlight: tango
+    keep_md: yes
+    theme: cerulean
+date: "20 December 2015"
+---
 **Goal**: To create a *dynamic document*, that thourougly explains step-by-step 
 analysis of the activity data. Futhermore, the objective includes 
 "...[a written] report that answers the questions detailed below. Ultimately, 
@@ -103,15 +111,7 @@ str(active_data$date) # See what type of Variable "Date" is in data frame
 steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=.75))
 steps <- steps+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 steps <- steps+ xlab("Date") + ylab("Amount Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
-steps <- steps + guides(fill=guide_legend(ncol=2)) + scale_y_continuous(breaks = seq(0, 25000, by = 1500, angle=45))
-```
-
-```
-## Warning in seq.default(0, 25000, by = 1500, angle = 45): extra argument
-## 'angle' will be disregarded
-```
-
-```r
+steps <- steps + guides(fill=guide_legend(ncol=2)) + scale_y_continuous(breaks = seq(0, 25000, by = 1500))
 print(steps)
 ```
 

@@ -53,7 +53,7 @@ str(active_data$date) # See what type of Variable "Date" is in data frame
 steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=.75))
 steps <- steps+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 steps <- steps+ xlab("Date") + ylab("Amount Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
-steps <- steps + guides(fill=guide_legend(ncol=2))
+steps <- steps + guides(fill=guide_legend(ncol=2)) + scale_y_continuous(breaks = seq(0, 25000, by = 1500))
 print(steps)
 
 # Step 4: Histogram(interval) of Steps each Day
@@ -66,7 +66,7 @@ print(step)
 ```
 
 ##**Mean**
-```{r out.width=c('900px', '900px'), fig.show='hold'}
+```{r fig.width = 10, fig.height = 7}
 # Step 5: Calculate table with mean steps by date
 group_date <- group_by(active_data, date) # Group data frame by date
 avg_steps_bydate <- summarise(group_date, Mean_Steps= mean(steps, na.rm=TRUE)) 
@@ -80,11 +80,11 @@ tbl_df(avg_steps_bydate) # View the Data frame with Date and Average/Mean Steps
 graph<- ggplot(avg_steps_bydate, aes(x=factor(date), y=Mean_Steps, fill=date, width=1))
 graph <- graph+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 graph <- graph+ xlab("Date") + ylab("Mean Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
-graph <- graph+ ggtitle("Average Steps per Day") + theme(legend.position="botton")
+graph <- graph+ ggtitle("Average Steps per Day") + theme(legend.position="bottom")
 graph <- graph+ theme(plot.title = element_text(size=10, face="bold", vjust=2))
 graph <- graph + theme(legend.background = element_rect()) 
-graph <- graph + theme(legend.background = element_rect(fill="gray90", size=1, linetype="dotted"))
-graph <- graph + guides(fill=guide_legend(ncol=10))
+graph <- graph + theme(legend.background = element_rect(fill="gray90", size=.75, linetype="dotted"))
+graph <- graph + guides(fill=guide_legend(ncol=8)) + scale_y_continuous(breaks = seq(0, 80, by = 10))
 print(graph)
 ```
 
