@@ -300,12 +300,30 @@ xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg, type=c("l",
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
-4. Imputing missing values
+4. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
 
 ```r
-y_max= max(interval_avg$steps)
-x_value= interval_avg[interval_avg$steps==y_max,1]
+# Step 1: Obtain Maximum Values
+y_max= max(interval_avg$steps) # Max of the Average Number of Steps
+print(y_max)
+```
 
+```
+## [1] 206.1698
+```
+
+```r
+x_value= interval_avg[interval_avg$steps==y_max,1] # Max of the Interval Matching Max Steps
+print(x_value)
+```
+
+```
+## [1] 835
+```
+
+```r
+# Step 2: Plot this point on the Time Series Plot
 xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", "g"),
        ylab="Average number of Steps", xlab="5-minute Intervals", main="Average Activity Patterns",
        panel=function(...){panel.lines(interval_avg$interval,interval_avg$steps)
@@ -316,14 +334,30 @@ xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", 
 
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
-5. Are there differences in activity patterns between weekdays and weekends?
+### Here we were able to see the five minute interval at point
+[1] 835
+
+### matches the maximum value of average steps at value
+[1] 206.1698
 
 
+5. Calculate and report the total number of missing values in the dataset
 
-Does the report give the 5-minute interval that, on average, contains the maximum number of steps?
+```r
+sum(is.na(active)) # Amount of all rows with "NA"
+```
 
-Does the report describe and show with code a strategy for imputing missing data?
+```
+## [1] 2304
+```
 
-Does the report contain a histogram of the total number of steps taken each day after missing values were imputed?
+```r
+# This shows 2304 lines were omited in previous anaylsis.
+```
 
-Does the report contain a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
+6. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+7. Imputing missing values, make a histogram of the total number of steps taken each day after missing values were imputed?
+
+8. Are there differences in activity patterns between weekdays and weekends? Create a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
+
