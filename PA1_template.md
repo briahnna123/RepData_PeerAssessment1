@@ -325,11 +325,18 @@ print(x_value)
 ```r
 # Step 2: Plot this point on the Time Series Plot
 xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", "g"),
-       ylab="Average number of Steps", xlab="5-minute Intervals", main="Average Activity Patterns",
+       ylab="Average number of Steps", xlab="5-minute Intervals", main="Average Activity Patterns", 
        panel=function(...){panel.lines(interval_avg$interval,interval_avg$steps)
                            panel.grid(...)
-                           panel.abline(v=x_value, lty = "dotted", col = "black")
-                           panel.points(x_value, y_max, cex=2, pch=16)})
+                           panel.abline(v=x_value, lty = "dotted", col = "black", lwd=2)
+                           panel.abline(h=y_max, lty = "dotted", col = "orange", lwd=2)
+                           panel.points(x_value, y_max, cex=2, pch=16)
+                           },
+                          par.settings=list(superpose.symbol=list(col=c("blue", "blue"), 
+                                            fill=c("blue", "blue"), pch=c(16, 16), cex=2)),
+
+                          auto.key = list(points=TRUE, x = 0.7, y = 0.8, text = c("Maxium Point"))
+       )
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
@@ -356,6 +363,88 @@ sum(is.na(active)) # Amount of all rows with "NA"
 ```
 
 6. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+```r
+# Stragety 1: One method would be to take the Median of the Time series, which 
+# is grouped by interval and means. This value to replace to "NA's" in the original data set
+
+# Step 1: Recall the Median value by 5-Minute Interval
+middle<- median(interval_avg$steps)
+middle # We can see the median value is 34.11321
+```
+
+```
+## [1] 34.11321
+```
+
+```r
+# Step 2: Replace all the "NA's" with this Median value and re-compute analysis
+df_missing= active # Set Orginal aat frame with "NA's" equal to new variable
+df_missing$steps[is.na(df_missing$steps)]= median(interval_avg$steps)
+str(df_missing) # View data frame 
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : num  34.1 34.1 34.1 34.1 34.1 ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+```
+
+```r
+head(df_missing)
+```
+
+```
+##      steps       date interval
+## 1 34.11321 2012-10-01        0
+## 2 34.11321 2012-10-01        5
+## 3 34.11321 2012-10-01       10
+## 4 34.11321 2012-10-01       15
+## 5 34.11321 2012-10-01       20
+## 6 34.11321 2012-10-01       25
+```
+
+
+```r
+# Stragety 2: Replace all missing values with Column Mean (Average Steps)
+# Note the Column mean is obtained by:
+mean(active$steps, na.rm=TRUE)
+```
+
+```
+## [1] 37.3826
+```
+
+```r
+# Notice the Resulting value 37.3826
+
+#Step 1:
+df= active # Set Orginal aat frame with "NA's" equal to new variable
+df$steps[is.na(df$steps)]= mean(df$steps, na.rm=TRUE) # Set all "NA's" to mean value
+str(df) # View the data
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : num  37.4 37.4 37.4 37.4 37.4 ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+```
+
+```r
+head(df)
+```
+
+```
+##     steps       date interval
+## 1 37.3826 2012-10-01        0
+## 2 37.3826 2012-10-01        5
+## 3 37.3826 2012-10-01       10
+## 4 37.3826 2012-10-01       15
+## 5 37.3826 2012-10-01       20
+## 6 37.3826 2012-10-01       25
+```
 
 7. Imputing missing values, make a histogram of the total number of steps taken each day after missing values were imputed?
 
