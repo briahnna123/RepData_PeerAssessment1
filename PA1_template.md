@@ -16,7 +16,8 @@ setwd("~/Desktop/RepData_PeerAssessment1")
 
 # Step 2: Unzip file and Read the data into descriptive object
 activity <- unzip("activity.zip", "activity.csv")
-active_data <- read.csv(activity)
+active_data <- read.csv(activity) # Data to Manipulate
+active <- read.csv(activity) # Raw Data
 
 # Step 3: Look and Clean the Data, remove "NA's"
 str(active_data) # View data Structure
@@ -103,15 +104,7 @@ str(active_data$date) # See what type of Variable "Date" is in data frame
 steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=.75))
 steps <- steps+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 steps <- steps+ xlab("Date") + ylab("Amount Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
-steps <- steps + guides(fill=guide_legend(ncol=2)) + scale_y_continuous(breaks = seq(0, 25000, by = 1500, angle=45))
-```
-
-```
-## Warning in seq.default(0, 25000, by = 1500, angle = 45): extra argument
-## 'angle' will be disregarded
-```
-
-```r
+steps <- steps + guides(fill=guide_legend(ncol=2)) + scale_y_continuous(breaks = seq(0, 25000, by = 1500))
 print(steps)
 ```
 
@@ -121,6 +114,9 @@ print(steps)
 # Step 4: Histogram(interval) of Steps each Day
 day_step<- aggregate(steps ~ date, active_data, sum) # Group by Date and then Sum the Steps
 step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col=cm.colors(6))
+abline(v = mean(day_step$steps), col = "ivory4", lwd = 2)
+abline(v = median(day_step$steps), col = "black", lwd = 3)
+legend(x = "topright", c("Mean", "Median"),col = c("ivory4", "black"), lwd = c(2, 2, 2))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-2.png) 
@@ -290,6 +286,19 @@ print(median_step) # This Graph shows Median, where middle value falls
 3. What is the average daily activity pattern?
 
 
+```r
+# Step 1: Load lattice library for Graph
+library(lattice)
+
+# Step 2: We want to a time series plot, so we need to group by Interval Type
+interval_avg = aggregate(steps~interval, active, mean) # Group by interval
+
+# Step 3: Make Plot, we want: Average Steps across all days(y) vs Time Invervals(x)
+xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg, type=c("l", "g"),
+       ylab="Average number of Steps", xlab="5-minute Intervals", main="Average Activity Patterns")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
 4. Imputing missing values
 
