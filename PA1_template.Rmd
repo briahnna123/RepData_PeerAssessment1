@@ -31,8 +31,8 @@ str(active_data) # View data Structure
 active_data<- na.omit(active_data) # Removing "NA's"
 
 # Step 4: Re-Peak at the Data Frame to ensure no "NA's"
-str(active_data)
-head(active_data)
+str(active_data) # View Data
+head(active_data) # View Data
 
 # Step 5: Use dplyr package for easier manipulation of data frame
 library(dplyr) 
@@ -55,7 +55,7 @@ steps<- ggplot(active_data, aes(x=factor(date), y=steps, fill=date, width=.75))
 steps <- steps+ geom_bar(color="black", stat="identity")+ scale_fill_hue(name="date")
 steps <- steps+ xlab("Date") + ylab("Amount Steps") + theme(axis.text.x= element_text(angle=90, size=6)) 
 steps <- steps + guides(fill=guide_legend(ncol=2)) + scale_y_continuous(breaks = seq(0, 25000, by = 1500))
-print(steps)
+print(steps) # View Graph
 
 # Step 4: Histogram(interval) of Steps each Day
 day_step<- aggregate(steps ~ date, active_data, sum) # Group by Date and then Sum the Steps
@@ -63,7 +63,7 @@ step <- hist(day_step$steps, xlab= "Number of Steps", main="Total Amount of Step
 abline(v = mean(day_step$steps), col = "ivory4", lwd = 2)
 abline(v = median(day_step$steps), col = "black", lwd = 3)
 legend(x = "topright", c("Mean", "Median"),col = c("ivory4", "black"), lwd = c(2, 2, 2))
-print(step) 
+print(step)  # View Graph
 # This Graph shows number of Steps each day as a larger interval histogram 
 # instead of individual dates interval.
 
@@ -89,7 +89,7 @@ graph <- graph+ theme(plot.title = element_text(size=10, face="bold", vjust=2))
 graph <- graph + theme(legend.background = element_rect()) 
 graph <- graph + theme(legend.background = element_rect(fill="gray90", size=.75, linetype="dotted"))
 graph <- graph + guides(fill=guide_legend(ncol=8)) + scale_y_continuous(breaks = seq(0, 80, by = 10))
-print(graph)
+print(graph) # View Graph
 ```
 
 ```{r}
@@ -125,12 +125,14 @@ median(day_step$steps)
 # Step 1: Load lattice library for Graph
 library(lattice)
 
-# Step 2: We want to a time series plot, so we need to group by Interval Type
+# Step 2: We want a time series plot, so we need to group by Interval Type
 interval_avg = aggregate(steps~interval, active, mean) # Group by interval
 
 # Step 3: Make Plot, we want: Average Steps across all days(y) vs Time Invervals(x)
-xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg, type=c("l", "g"),
-       ylab="Average number of Steps", xlab="5-minute Intervals", main="Average Activity Patterns")
+xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg, 
+       type=c("l", "g"),
+       ylab="Average number of Steps", xlab="5-minute Intervals", 
+       main="Average Activity Patterns")
 
 ```
 
@@ -140,7 +142,7 @@ xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg, type=c("l",
 # Step 1: Obtain Maximum Values
 y_max= max(interval_avg$steps) # Max of the Average Number of Steps
 print(y_max)
-x_value= interval_avg[interval_avg$steps==y_max,1] # Max of the Interval Matching Max Steps
+x_value= interval_avg[interval_avg$steps==y_max,1] # Interval Matching Max Steps
 print(x_value)
 
 # Step 2: Plot this point on the Time Series Plot
@@ -152,7 +154,7 @@ xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", 
                            panel.abline(h=y_max, lty = "dotted", col = "orange", lwd=2)
                            panel.points(x_value, y_max, cex=2, pch=16)
                            },
-                          par.settings=list(superpose.symbol=list(col=c("blue", "blue"), 
+                           par.settings=list(superpose.symbol=list(col=c("blue", "blue"), 
                                             fill=c("blue", "blue"), pch=c(16, 16), cex=1)),
 
                           auto.key = list(points=TRUE, x = 0.7, y = 0.8, text = c("Max Interval"))
@@ -180,7 +182,8 @@ sum(is.na(active)) # Amount of all rows with "NA"
 6. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 ```{r}
 # Stragety 1: One method would be to take the Median of the Time series, which 
-# is grouped by interval and means. This value to replace to "NA's" in the original data set
+# is grouped by interval and means. This value to replace to "NA's" in the 
+# original data set.
 
 # Step 1: Recall the Median value by 5-Minute Interval
 middle<- median(interval_avg$steps)
@@ -190,7 +193,7 @@ middle # We can see the median value is 34.11321
 df_missing= active # Set Orginal aat frame with "NA's" equal to new variable
 df_missing$steps[is.na(df_missing$steps)]= median(interval_avg$steps)
 str(df_missing) # View data frame 
-head(df_missing)
+head(df_missing) # View data frame 
 
 ```
 
@@ -198,13 +201,13 @@ head(df_missing)
 # Stragety 2: Replace all missing values with Column Mean (Average Steps)
 # Note the Column mean is obtained by:
 mean(active$steps, na.rm=TRUE)
-# Notice the Resulting value 37.3826
+# Notice the Resulting value is 37.3826
 
-#Step 1:
-df= active # Set Orginal aat frame with "NA's" equal to new variable
+# Step 1:
+df= active # Set Orginal data frame with "NA's" equal to new value (the column Mean)
 df$steps[is.na(df$steps)]= mean(df$steps, na.rm=TRUE) # Set all "NA's" to mean value
 str(df) # View the data
-head(df)
+head(df) # View the data
 
 ```
 
@@ -215,6 +218,7 @@ head(df)
 
 # Step 1: Load ggplot2 for graphing
 library(ggplot2) 
+
 # Step 2: Histogram Steps per Day
 sum_missing_steps<- aggregate(steps ~ date, df_missing, sum) # Group by Date and then Sum the Steps
 step <- hist(sum_missing_steps$steps, xlab= "Number of Steps", main="Total Amount of Steps Each Day!", col=cm.colors(6))
@@ -225,7 +229,9 @@ legend(x = "topright", c("Mean", "Median"),col = c("ivory4", "black"), lwd = c(2
 
 ### We should notice the similiarties between our original steps graph, without NA,
 ### and current graphs with NA replaced values by Median. In our original we had  
-### 53 observations after grouping and in our modified we have 61 observations after grouping. 
+### 53 observations after grouping and in our modified we have 61 observations
+### after grouping.
+
 ### The original values produced:
 ```{r}
 mean(day_step$steps) # Original Mean Steps
@@ -269,21 +275,22 @@ median(replace_missing$steps) # New Median Steps
 7. Imputing missing values, Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 ### No, the assigned Median Values to the Original Data Set does not change the values by much.
-### Without NA's,  the Total Number of Steps was 10766.19 and the Total Number of Steps
-### with replaced NA's was 10642.7. The diference is:
+### Without NA's, the Total Number of Steps was 10766.19 and the Total Number of Steps
+### with replaced NA's was 10642.7, The diference is:
 
 ```{r}
 10766.19 -10642.7 # Difference of 123.49 Steps
 ```
 
-### The addition of NA's impacted the data resulting in averages and medians to be slightly smaler.
+### The addition of NA's impacted the data, resulting in averages and medians
+### to be slightly smaller.
 
 8. Are there differences in activity patterns between weekdays and weekends? Create a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
 (Use the dataset with the filled-in missing values for this part.)
 
 ```{r}
 # Step1: Define WeekDays and WeekEnds
-patterns= df_missing
+patterns= df_missing # Set descriptive varible to NA edited data frame
 patterns$day <- c("weekday", "weekend") # Add Column for Week-type
 patterns$day <- weekdays(as.Date(patterns$date)) # Fill in the Column
 patterns[patterns$day == "Monday",]$day = "weekday"
@@ -295,30 +302,64 @@ patterns[patterns$day == "Saturday",]$day = "weekend"
 patterns[patterns$day == "Sunday",]$day = "weekend"
 str(patterns)
 patterns[, "day"] <- as.factor(patterns[, "day"]) # Turn into a factor w/ two levels
-str(patterns)
+str(patterns) # View data frame
 
 # Step 2: Create Graph 
 library(ggplot2)
 pattern2<- aggregate(steps~interval+ day, patterns, mean) # Group by interval
-ymax= max(pattern2$steps) # Final Largest Value
-ymax # Notice this is approximately the same Maxium Step Value as Above (Above 206.1698)
+ymax= max(pattern2$steps) # Find Largest Step Value (non-factored week-type data)
+ymax # Notice this is approximately the same Maximum Step Value as Above (Above 206.1698)
 xmax= pattern2[pattern2$steps==ymax,1] # Find Matching Interval
 xmax # Notice this Value is the Same Maxium Interval as Above (Above 835)
-pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps, color=day)) + geom_point(shape=1)  + facet_grid(day ~.) + theme(strip.background = element_rect(fill="orange")) + ggtitle("Step Trends Weekdays Vs. Weekends")
+pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps, color=day)) + geom_point(shape=1)  + facet_grid(day ~., scales="free") + theme(strip.background = element_rect(fill="orange")) + ggtitle("Step Trends Weekdays Vs. Weekends")
 pattern_plot
 ```
 
 ```{r}
 # Step 3: Traditional Time Series Plot
 library(ggplot2)
-week_pattern<- ggplot(pattern2, aes(interval, steps, color=day)) + geom_line(size = .5) + facet_wrap(~day, nrow = 2, ncol = 1) + labs(x = "Interval Number", y = "Number of Steps") + ggtitle("Step Trends Weekdays Vs. Weekends")
-week_pattern= week_pattern #+ theme(strip.background = element_rect(fill="chartreuse4"))
-print(week_pattern)
+week_pattern<- ggplot(pattern2, aes(interval, steps, color=day)) + geom_line(size = .5) + facet_wrap(~day, nrow = 2, ncol = 1, scales="free") + labs(x = "Interval Number", y = "Number of Steps") + ggtitle("Step Trends Weekdays Vs. Weekends")
+week_pattern= week_pattern
+print(week_pattern) # View Graph
 ```
 
-### Notice the average number of steps taken per 5-minute interval across weekdays 
-### and weekends are approximately the same. Here after adding the Median for missing
-### values, we see the Max Steps 206.1698 is and at Interval 835
+### Notice the average number of steps taken per 5-minute interval across 
+### weekdays and weekends look approximately the same. Recall origianlly the
+### values obtained were Maximum Steps 206.1698 at Interval Time 835
+### Specifically, we can obtain the new values and compare:
 
+```{r}
+# Step 1: Calculate Maximum Step Values and Correspoding Intervals for Both
+# Weekdays and Weekends
+weekday <- pattern2[pattern2$day=="weekday", ] # Subset Weekdays
+str(weekday) # View data frame
+weekend<- pattern2[pattern2$day=="weekend", ] # Subset Weekends
+str(weekend) # View data frame
 
+ymax_weekday= max(weekday$steps)
+print(ymax_weekday) # View the Maximum Steps on Weekday
+ymax_weekend= max(weekend$steps)
+print(ymax_weekend) # View the Maximum Steps on Weekend
+x_value_weekday <- weekday[weekday$steps==ymax_weekday,1]
+print(x_value_weekday)
+x_value_weekend <- weekend[weekend$steps==ymax_weekend,1]
+print(x_value_weekend)
+
+```
+
+### There is a small difference between Mean Weekday Steps and Mean Weekend Steps
+### We can see for Weekdays the Maximum Average Step is 207.4373, which
+### corresponds to Interval 835, whereas for Weekends the Maximum Average Step 
+### is 157.3892, which corresponds to Interval 915. 
+### There is not a large difference between Weekday Average Steps and 
+### Weekend Average Steps, the difference is:
+
+```{r}
+diff <- ymax_weekday-ymax_weekend
+print(diff) # Approximately 50 Steps differ from Weekday/Weekend
+```
+
+### Lastly, we should notice the Maximum Average Step and Interval is close to 
+### the original values of 206.1698 Steps and Interval 835 for both Weekday
+### and Weekend
 
