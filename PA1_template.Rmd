@@ -304,15 +304,16 @@ ymax= max(pattern2$steps) # Final Largest Value
 ymax # Notice this is approximately the same Maxium Step Value as Above (Above 206.1698)
 xmax= pattern2[pattern2$steps==ymax,1] # Find Matching Interval
 xmax # Notice this Value is the Same Maxium Interval as Above (Above 835)
-pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps, color=day)) + geom_point(shape=1)  + facet_grid(day ~.) + theme(strip.background = element_rect(fill="orange"))
+pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps, color=day)) + geom_point(shape=1)  + facet_grid(day ~.) + theme(strip.background = element_rect(fill="orange")) + ggtitle("Step Trends Weekdays Vs. Weekends")
 pattern_plot
+```
 
-# Step 3: Traditional Time Series Plot 
-week_pattern = aggregate(steps ~ interval + day, mean, data = patterns)
-week_graph<- xyplot(steps ~ interval | day, data = patterns, layout = c(2, 1), 
-                    xlab = "IntervalNumber", ylab = "Number of steps", main= "Differences Between WeekDays and WeekEnds", type=c("l", "g")          
-    )
-print(week_graph)
+```{r}
+# Step 3: Traditional Time Series Plot
+library(ggplot2)
+week_pattern<- ggplot(pattern2, aes(interval, steps, color=day)) + geom_line(size = .5) + facet_wrap(~day, nrow = 2, ncol = 1) + labs(x = "Interval Number", y = "Number of Steps") + ggtitle("Step Trends Weekdays Vs. Weekends")
+week_pattern= week_pattern #+ theme(strip.background = element_rect(fill="chartreuse4"))
+print(week_pattern)
 ```
 
 ### Notice the average number of steps taken per 5-minute interval across weekdays 

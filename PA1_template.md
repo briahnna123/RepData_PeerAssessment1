@@ -665,22 +665,22 @@ xmax # Notice this Value is the Same Maxium Interval as Above (Above 835)
 ```
 
 ```r
-pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps, color=day)) + geom_point(shape=1)  + facet_grid(day ~.) + theme(strip.background = element_rect(fill="orange"))
+pattern_plot <- ggplot(pattern2, aes(x=interval, y=steps, color=day)) + geom_point(shape=1)  + facet_grid(day ~.) + theme(strip.background = element_rect(fill="orange")) + ggtitle("Step Trends Weekdays Vs. Weekends")
 pattern_plot
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-22-1.png) 
 
+
 ```r
-# Step 3: Traditional Time Series Plot 
-week_pattern = aggregate(steps ~ interval + day, mean, data = patterns)
-week_graph<- xyplot(steps ~ interval | day, data = patterns, layout = c(2, 1), 
-                    xlab = "IntervalNumber", ylab = "Number of steps", main= "Differences Between WeekDays and WeekEnds", type=c("l", "g")          
-    )
-print(week_graph)
+# Step 3: Traditional Time Series Plot
+library(ggplot2)
+week_pattern<- ggplot(pattern2, aes(interval, steps, color=day)) + geom_line(size = .5) + facet_wrap(~day, nrow = 2, ncol = 1) + labs(x = "Interval Number", y = "Number of Steps") + ggtitle("Step Trends Weekdays Vs. Weekends")
+week_pattern= week_pattern #+ theme(strip.background = element_rect(fill="chartreuse4"))
+print(week_pattern)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-22-2.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-23-1.png) 
 
 ### Notice the average number of steps taken per 5-minute interval across weekdays 
 ### and weekends are approximately the same. Here after adding the Median for missing
