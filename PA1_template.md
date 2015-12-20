@@ -7,7 +7,7 @@ analysis of the activity data. Futhermore, the objective includes
 that can be processed by knitr and be transformed into an HTML file." 
 (*Coursera, Roger D. Peng*)
 
-1. Loading and preprocessing the data
+1\. Loading and preprocessing the data
 
 
 ```r
@@ -85,7 +85,7 @@ active_data <- tbl_df(active_data) # Create dplyr data frame
 # observations! We can now move onto the second part of the analysis!
 ```
 
-2. What is mean total number of steps taken per day?
+2\. What is mean total number of steps taken per day?
 
 ```r
 # Step 1: Load ggplot2 for graphing
@@ -283,7 +283,7 @@ print(median_step) # This Graph shows Median, where middle value falls
 [1] 10765
 
 
-3. What is the average daily activity pattern?
+3\. What is the average daily activity pattern?
 
 
 ```r
@@ -302,7 +302,7 @@ xyplot(interval_avg$steps ~interval_avg$interval, data=interval_avg,
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png) 
 
-4. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+4\. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
 
 ```r
@@ -350,7 +350,7 @@ xyplot(interval_avg$steps~interval_avg$interval, data=interval_avg, type=c("l", 
 [1] 206.1698
 
 
-5. Calculate and report the total number of missing values in the dataset
+5\. Calculate and report the total number of missing values in the dataset
 
 ```r
 sum(is.na(active)) # Amount of all rows with "NA"
@@ -364,7 +364,7 @@ sum(is.na(active)) # Amount of all rows with "NA"
 # This shows 2304 lines were omited in previous anaylsis.
 ```
 
-6. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+6\. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
 ```r
 # Stragety 1: One method would be to take the Median of the Time series, which 
@@ -449,7 +449,7 @@ head(df) # View the data
 ## 6 37.3826 2012-10-01       25
 ```
 
-7. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
+7\. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.
 
 ```r
 # Use the Median created data frame because when data is skewed the Median is a 
@@ -592,7 +592,7 @@ median(replace_missing$steps) # New Median Steps
 ### We should notice the similiarties between our original steps graph, without
 ### NA's and current graphs with NA replaced values by Median.
 
-7. Imputing missing values, Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+8\. Imputing missing values, Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 ### No, the assigned Median Values to the Original Data Set does not change the values by much.
 ### Without NA's, the Total Number of Steps was 10766.19 and the Total Number of Steps
@@ -610,7 +610,7 @@ median(replace_missing$steps) # New Median Steps
 ### The addition of NA's impacted the data, resulting in averages and medians
 ### to be slightly smaller.
 
-8. Are there differences in activity patterns between weekdays and weekends? Create a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
+9\. Are there differences in activity patterns between weekdays and weekends? Create a panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends?
 (Use the dataset with the filled-in missing values for this part.)
 
 
